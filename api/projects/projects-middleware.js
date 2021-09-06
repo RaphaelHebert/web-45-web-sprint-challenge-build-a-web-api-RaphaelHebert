@@ -11,9 +11,7 @@ function checkProjectId(req, res, next){
                 res.status(404).json({ message: "project not found..."})
             }
         })
-        .catch(err => {
-            res.status(500).json({ message: "internal server error"})
-        })
+        .catch(next)
 }
 
 function checkProjectBody(req, res, next){

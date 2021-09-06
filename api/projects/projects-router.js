@@ -5,19 +5,19 @@ const Projects = require('./projects-model')
 
 const { checkProjectId, checkProjectBody } = require('./projects-middleware')
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     Projects.get()
         .then(projectList => 
             res.status(200).json(projectList))
-        .catch(err => console.log(err.message))
+        .catch(next)
 })
 
-router.get('/:id',checkProjectId , (req, res, next) => {
+router.get('/:id',checkProjectId , (req, res) => {
     res.status(200).json(req.project)
 })
 
 
-router.post('/', checkProjectBody, (req, res) => {
+router.post('/', checkProjectBody, (req, res, next) => {
     console.log('working on posting a project')
     Projects.insert(req.body)
         .then(newProject => {
@@ -26,10 +26,10 @@ router.post('/', checkProjectBody, (req, res) => {
         .then(newProject => {
             res.status(200).json(newProject)
         })
-        .catch(err => res.status(500).json({ message: err.message}))
+        .catch(next)
 })
 
-router.put('/:id', checkProjectId, checkProjectBody, (req, res) => {
+router.put('/:id', checkProjectId, checkProjectBody, (req, res, next) => {
     console.log('req.body.completed', req.body.completed)
     if(req.body.completed === undefined){
         res.status(400).json({ message: "missing completed field"})
@@ -46,26 +46,28 @@ router.put('/:id', checkProjectId, checkProjectBody, (req, res) => {
                     name: resp.name
                 })
             })
-            .catch(err => console.log(err.message))
+            .catch(next)
         }
 })
 
-router.delete('/:id', checkProjectId, (req, res) => {
+router.delete('/:id', checkProjectId, (req, res, next) => {
     Projects.remove(req.params.id)
         .then(() => {
             res.status(200).json()
         })
-        .catch(err => res.status(500).json({ message: err.message}))
+        .catch(next)
 })
 
-router.get('/:id/actions', checkProjectId, (req, res) => {
+router.get('/:id/actions', checkProjectId, (req, res, next) => {
     Projects.getProjectActions(req.params.id)
         .then(actions => {
             console.log('actions', actions)
             res.status(200).json(actions)
         })
-        .catch(err => res.status(500).json({ message: err.message}))
+        .catch(next)
 })
+
+
 
 
 

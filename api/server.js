@@ -18,6 +18,13 @@ server.get('*', (req, res) => {
     res.status(404).json({ message: "not found"})
 })
 
+server.use((err, req, res, next) => {
+    console.log('-----> error: ', err)
+    res.status(err.status || 500).json({ 
+        message: err.message
+    })
+})
+
 
 // Build your actions router in /api/actions/actions-router.js
 // Build your projects router in /api/projects/projects-router.js

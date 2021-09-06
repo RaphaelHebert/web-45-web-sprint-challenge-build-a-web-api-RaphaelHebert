@@ -15,9 +15,7 @@ function checkActionID(req, res, next){
                 next()
             }
         })
-        .catch( err => {
-            res.status(500).json({ message: "internal server error"})
-        })
+        .catch(next)
 }
 function checkActionBody(req, res, next){
     const { notes, description, project_id } = req.body
