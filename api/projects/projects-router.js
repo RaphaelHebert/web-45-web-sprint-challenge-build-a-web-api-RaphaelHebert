@@ -30,24 +30,24 @@ router.post('/', checkProjectBody, (req, res) => {
 })
 
 router.put('/:id', checkProjectId, checkProjectBody, (req, res) => {
-    if(!req.body.completed){
+    console.log('req.body.completed', req.body.completed)
+    if(req.body.completed === undefined){
         res.status(400).json({ message: "missing completed field"})
-    }
-
-    const changes = {
-        ...req.body,
-        id: req.params.id
-    }
-
-    Projects.update(req.params.id, changes)
-        .then(updatedProject => {
-            return updatedProject
-        })
-        .then(resp => {
-            console.log('resp', resp)
-            res.status(200).json(resp)
-        })
-        .catch(err => console.log(err.message))
+    }else{
+        Projects.update(req.params.id, req.body)
+            .then(updatedProject => {
+                return updatedProject
+            })
+            .then(resp => {
+                console.log('resp', resp)
+                res.status(200).json({ 
+                    completed: resp.completed,
+                    description: resp.description,
+                    name: resp.name
+                })
+            })
+            .catch(err => console.log(err.message))
+        }
 })
 
 router.delete('/:id', checkProjectId, (req, res) => {

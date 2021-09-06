@@ -17,7 +17,6 @@ function checkProjectId(req, res, next){
 }
 
 function checkProjectBody(req, res, next){
-    console.log("req.body", req.body)
     const { name, description } = req.body
     if(!description || !name ){
         res.status(400).json({ message: "missing information"})

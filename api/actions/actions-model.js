@@ -37,6 +37,7 @@ function insert(action) {
 }
 
 function update(id, changes) {
+  console.log('-----------> changes', changes)
   return db('actions')
     .where('id', id)
     .update(changes)
